@@ -1,0 +1,3 @@
+[submodule "libs/knife"]
+	path = libs/knife
+	url = git@github.com:airstruck/knife.git
