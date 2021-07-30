@@ -1,3 +1,6 @@
 [submodule "libs/knife"]
 	path = libs/knife
 	url = git@github.com:airstruck/knife.git
+[submodule "libs/push"]
+	path = libs/push
+	url = git@github.com:Ulydev/push.git
