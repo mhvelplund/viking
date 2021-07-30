@@ -13,3 +13,8 @@ Timer = require "libs.knife.knife.timer"
 
 -- Push
 Push = require('libs.push.push')
+
+-- Local
+Scene = require("src.Scene")
+-- SceneManager = require("src.SceneManager")
+-- FightScene = require("src.FightScene")
