@@ -15,6 +15,5 @@ Timer = require "libs.knife.knife.timer"
 Push = require('libs.push.push')
 
 -- Local
+color = require("src.color")
 Scene = require("src.Scene")
--- SceneManager = require("src.SceneManager")
--- FightScene = require("src.FightScene")
