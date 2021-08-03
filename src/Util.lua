@@ -1,3 +1,5 @@
+local Util = {}
+
 local dawnBringer32 = {
     ["black"] = {0, 0, 0},
     ["valhalla"] = {34, 32, 52},
@@ -37,11 +39,59 @@ local dawnBringer32 = {
 --- @param name string the Dawnbringer32 palette name of the color
 --- @param alpha number an optional alpha value, default 1.0
 --- @return number r,number g,number b ,number a Love2D compatible color in RGBA
-local function color(name, alpha)
+function Util.color(name, alpha)
     alpha = alpha or 1
     local c = dawnBringer32[name]
     assert(c, "Unknown color: "..name)
     return c[1]/255, c[2]/255, c[3]/255, alpha
 end
 
-return color
+--- Return coordinates for a centered texture.
+--- @param texture love.Texture
+--- @param x number
+--- @param y number
+--- @return love.Texture texture, number x, number y
+function Util.centered(texture, x, y)
+    assert(texture, "No texture argument provided")
+    x = x or 0
+    y = y or 0
+    local w,h = texture:getDimensions()
+    return texture, x-(w/2), y-(h/2)
+end
+
+--- Scale, mirror, and rotate a drawable.
+--- @param options table
+--- @return love.Canvas canvas
+function Util.scaleAndRotate(options)
+    options = options or {}
+
+    local drawable = options.drawable
+    assert(drawable, "No drawable argument provided")
+
+    local dw,dh = drawable:getDimensions()
+    local scale = options.scale or 1
+    local w = options.width or dw*scale
+    local h = options.height or dh*scale
+    local mirror = options.mirror and -1 or 1
+    local rotation = options.rotation or 0
+    local wscale, hscale = scale,scale
+
+    if w ~= dw and not wscale then
+        wscale = w/dw
+    end
+
+    if h ~= dh and not hscale then
+        hscale = h/dh
+    end
+
+    wscale = wscale * mirror
+
+    local canvas = love.graphics.newCanvas(w,h)
+    local original = love.graphics.getCanvas() -- this is needed because the push library is already using a canvas
+    love.graphics.setCanvas(canvas)
+    love.graphics.draw( drawable, w/2, h/2, (math.pi/180)*rotation, wscale, hscale, dw/2, dh/2)
+    love.graphics.setCanvas(original)
+    return canvas
+end
+
+return Util

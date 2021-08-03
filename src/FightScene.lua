@@ -1,68 +1,23 @@
 require("dependencies")
 
+local Icon = require("src.Icon")
+
 local FightScene = Scene:extend()
 local viking1, shield1, sword1
 local viking2, shield2, sword2
-
-local function centered(drawable, x, y)
-    assert(drawable, "No drawable argument provided")
-    x = x or 0
-    y = y or 0
-    local w,h = drawable:getDimensions()
-    return drawable, x-(w/2), y-(h/2)
-end
-
-local function scaleAndRotate(options)
-    options = options or {}
-
-    local drawable = options.drawable
-    assert(drawable, "No drawable argument provided")
-
-    local dw,dh = drawable:getDimensions()
-    local scale = options.scale or 1
-    local w = options.width or dw*scale
-    local h = options.height or dh*scale
-    local mirror = options.mirror and -1 or 1
-    local rotation = options.rotation or 0
-    local wscale, hscale = scale,scale
-
-    if w ~= dw and not wscale then
-        wscale = w/dw
-    end
-
-    if h ~= dh and not hscale then
-        hscale = h/dh
-    end
-
-    wscale = wscale * mirror
-
-    local canvas = love.graphics.newCanvas(w,h)
-    local original = love.graphics.getCanvas() -- this is needed because the push library is already using a canvas
-    love.graphics.setCanvas(canvas)
-    love.graphics.draw( drawable, w/2, h/2, (math.pi/180)*rotation, wscale, hscale, dw/2, dh/2)
-    love.graphics.setCanvas(original)
-    return canvas
-end
 
 local function makeIcon(drawable, dark, light, padding)
     assert(drawable, "No drawable argument provided")
     padding = padding or 1
     dark, light = dark or "black", light or "black"
 
-    local lineWidth, originalColor = love.graphics.getLineWidth(), {love.graphics.getColor()}
     local size = (math.max(drawable:getDimensions()) / 2)+padding
-    local canvas = love.graphics.newCanvas(size*2, size*2)
+    local icon = Icon(size, 5, dark, light)
+    local canvas = love.graphics.newCanvas(icon:getDrawable():getDimensions())
     local originalCanvas = love.graphics.getCanvas() -- this is needed because the push library is already using a canvas
     love.graphics.setCanvas(canvas)
-    love.graphics.setColor(color(light))
-    love.graphics.circle("fill", size, size, size)
-    love.graphics.setColor(color(dark))
-    love.graphics.setLineWidth(5)
-    love.graphics.circle("line", size, size, size)
-    love.graphics.setColor(color("white"))
+    love.graphics.draw(icon:getDrawable(), 0, 0)
     love.graphics.draw(centered(drawable, size, size))
-    love.graphics.setLineWidth(lineWidth)
-    love.graphics.setColor(unpack(originalColor))
     love.graphics.setCanvas(originalCanvas)
     return canvas
 end
@@ -95,19 +50,10 @@ function FightScene:constructor()
     }
     shield2 = makeIcon(_sh2, "brown", "mandy", 15)
 
-    local _sw1 = love.graphics.newImage( "img/sword.png" )
-    _sw1 = scaleAndRotate {
-        drawable = _sw1,
-        scale = (VIRTUAL_HEIGHT*0.2)/({_sw1:getDimensions()})[2]
-    }
-    sword1 = makeIcon(_sw1, "royal_blue", "cornflower", 15)
-
-    local _sw2 = love.graphics.newImage( "img/sword.png" )
-    _sw2 = scaleAndRotate {
-        drawable = _sw2,
-        scale = (VIRTUAL_HEIGHT*0.2)/({_sw2:getDimensions()})[2]
-    }
-    sword2 = makeIcon(_sw2, "brown", "mandy", 15)
+    local padding = 15
+    local iconRadius = VIRTUAL_HEIGHT*0.1 + padding
+    sword1 = require("src.Sword")("img/sword.png", VIRTUAL_HEIGHT*0.1, padding, 0, VIRTUAL_HEIGHT/3-iconRadius, "royal_blue", "cornflower")
+    sword2 = require("src.Sword")("img/sword.png", VIRTUAL_HEIGHT*0.1, padding, VIRTUAL_WIDTH-iconRadius*2, VIRTUAL_HEIGHT/3-iconRadius, "brown", "mandy")
 end
 
 function FightScene:update(dt)
@@ -118,16 +64,17 @@ end
 
 function FightScene:render()
     -- Draw second combatant
-    local sh1w, _, sw1w, _ = shield1:getDimensions(), sword1:getDimensions()
+    local sh1w, _ = shield1:getDimensions()
     love.graphics.draw(centered(viking1, VIRTUAL_WIDTH/4, VIRTUAL_HEIGHT/2))
-    love.graphics.draw(centered(sword1, sw1w/2, VIRTUAL_HEIGHT/3))
+    sword1:render()
     love.graphics.draw(centered(shield1, sh1w/2, (VIRTUAL_HEIGHT/3)*2))
 
     -- Draw second combatant
-    local sh2w, _, sw2w, _ = shield2:getDimensions(), sword2:getDimensions()
+    local sh2w, _ = shield2:getDimensions()
     love.graphics.draw(centered(viking2, (VIRTUAL_WIDTH/4)*3, VIRTUAL_HEIGHT/2))
-    love.graphics.draw(centered(sword2, VIRTUAL_WIDTH-(sw2w/2), VIRTUAL_HEIGHT/3))
+    sword2:render()
     love.graphics.draw(centered(shield2, VIRTUAL_WIDTH-(sh2w/2), (VIRTUAL_HEIGHT/3)*2))
+
 end
 
 return FightScene

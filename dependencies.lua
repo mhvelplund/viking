@@ -15,5 +15,9 @@ Timer = require "libs.knife.knife.timer"
 Push = require('libs.push.push')
 
 -- Local
-color = require("src.color")
+local Util = require("src.Util")
+centered = Util.centered
+color = Util.color
+scaleAndRotate = Util.scaleAndRotate
+
 Scene = require("src.Scene")
