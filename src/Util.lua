@@ -60,7 +60,16 @@ function Util.centered(texture, x, y)
 end
 
 --- Scale, mirror, and rotate a drawable.
---- @param options table
+---
+--- @class Options
+--- @field drawable love.Texture the image to operate on
+--- @field scale number the scale for the texture, default 1
+--- @field width number the width for the texture, default original width * scale
+--- @field height number the height for the texture, default original width * scale
+--- @field mirror boolean mirror the image horizontally, default false
+--- @field rotation number the number of degrees clockwise to rotate the drawable, default 0
+---
+--- @param options Options
 --- @return love.Canvas canvas
 function Util.scaleAndRotate(options)
     options = options or {}

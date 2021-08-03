@@ -1,6 +1,7 @@
 require("dependencies")
 
 --- A circular icon.
+--- @class Icon
 local Icon = Class:extend()
 
 --- Create a circular icon.
@@ -27,7 +28,7 @@ function Icon:constructor(radius, border, dark, light)
 end
 
 --- Return the canvas containing the icon.
---- @return love.Canvas canvas
+--- @return love.Texture texture
 function Icon:getDrawable()
     return self.canvas
 end
