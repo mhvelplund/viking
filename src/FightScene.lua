@@ -1,5 +1,5 @@
 require("dependencies")
-
+local Sword = require("src.Sword")
 local Icon = require("src.Icon")
 
 local FightScene = Scene:extend()
@@ -52,8 +52,8 @@ function FightScene:constructor()
 
     local padding = 15
     local iconRadius = VIRTUAL_HEIGHT*0.1 + padding
-    sword1 = require("src.Sword")("img/sword.png", VIRTUAL_HEIGHT*0.1, padding, 0, VIRTUAL_HEIGHT/3-iconRadius, "royal_blue", "cornflower")
-    sword2 = require("src.Sword")("img/sword.png", VIRTUAL_HEIGHT*0.1, padding, VIRTUAL_WIDTH-iconRadius*2, VIRTUAL_HEIGHT/3-iconRadius, "brown", "mandy")
+    sword1 = Sword("img/sword.png", VIRTUAL_HEIGHT*0.1, padding, 0, VIRTUAL_HEIGHT/3-iconRadius, "royal_blue", "cornflower")
+    sword2 = Sword("img/sword.png", VIRTUAL_HEIGHT*0.1, padding, VIRTUAL_WIDTH-iconRadius*2, VIRTUAL_HEIGHT/3-iconRadius, "brown", "mandy")
 end
 
 function FightScene:update(dt)

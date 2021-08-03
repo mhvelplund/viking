@@ -3,19 +3,28 @@ local Icon = require("src.Icon")
 
 local Sword = Class:extend()
 
+--- A sword entity.
+
+--- @param image string
+--- @param radius number
+--- @param padding number
+--- @param x number
+--- @param y number
+--- @param dark string
+--- @param light string
 function Sword:constructor(image, radius, padding, x, y, dark, light)
     assert(image)
     local _img = love.graphics.newImage(image)
-    local imgDims = _img:getDimensions()
+    local ow,oh = _img:getDimensions()
 
     padding = padding or 0
-    radius = radius or math.max(imgDims)/2
+    radius = radius or math.max(ow,oh)/2
 
     self.x = x or 0; self.y = y or 0
 
     self.img = scaleAndRotate {
         drawable = _img,
-        scale = (radius*2) / math.max(imgDims)
+        scale = (radius*2) / math.max(ow,oh)
     }
 
     self.icon = Icon(radius+padding, 5, dark, light)
