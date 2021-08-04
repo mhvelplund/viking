@@ -57,10 +57,6 @@ local function animateCancel(behavior, subject)
     subject.targetY = h/2
 
     subject.animation:remove() -- cancel existing animation
-    -- local rotation = subject.rotation
-    -- subject.animation = Timer.tween(behavior.frame.duration, {
-    --     [subject] = { rotation = rotation-180 },
-    -- })
 end
 
 --- A sword entity.
