@@ -31,7 +31,9 @@ function Item:getDimensions()
     return self.icon:getDrawable():getDimensions()
 end
 
-function Item:render()
-end
+-- Abstract functions
+
+function Item:render() end
+function Item:update(dt) end
 
 return Item
