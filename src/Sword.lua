@@ -41,11 +41,11 @@ local function animateHit(behavior, subject)
     })
 
     subject.animation:finish(function ()
+        Event.dispatch('hit', subject)
         subject.targetTransparency = 0
         subject.targetX = w/2
         subject.targetY = h/2
         subject.hitTransparency = 0
-        Event.dispatch('hit', subject)
         subject.direction = nil
     end)
 end
@@ -141,6 +141,10 @@ function Sword:slash(direction)
         self.direction = direction
         self.state:setState("cancel")
     end
+end
+
+function Sword:target()
+    return self.targetX, self.targetY
 end
 
 return Sword
