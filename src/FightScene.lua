@@ -7,14 +7,15 @@ local FightScene = Scene:extend()
 local viking1, shield1, sword1
 local viking2, shield2, sword2
 
-function FightScene:constructor()
-    local _v1 = love.graphics.newImage( "img/viking.png" )
+--- Create a fight scene
+function FightScene:constructor(combatant1, combatant2, sword1Img, sword2Img, shield1Img, shield2Img)
+    local _v1 = love.graphics.newImage( combatant1 )
     viking1 = scaleAndRotate {
         drawable = _v1,
         scale = (VIRTUAL_HEIGHT*0.8)/({_v1:getDimensions()})[2]
     }
 
-    local _v2 = love.graphics.newImage( "img/mongol.png" )
+    local _v2 = love.graphics.newImage( combatant2 )
     viking2 = scaleAndRotate {
         drawable = _v2,
         scale = (VIRTUAL_HEIGHT*0.8)/({_v2:getDimensions()})[2],
@@ -24,10 +25,10 @@ function FightScene:constructor()
     local padding = 15
     local itemRadius = VIRTUAL_HEIGHT*0.1
     local iconRadius = itemRadius + padding
-    shield1 = Shield("img/shield.png", itemRadius, padding, 0, (VIRTUAL_HEIGHT/3)*2-iconRadius, "royal_blue", "cornflower")
-    shield2 = Shield("img/shield.png", itemRadius, padding, VIRTUAL_WIDTH-iconRadius*2, (VIRTUAL_HEIGHT/3)*2-iconRadius, "brown", "mandy")
-    sword1 = Sword("img/sword.png", itemRadius, padding, 0, VIRTUAL_HEIGHT/3-iconRadius, "royal_blue", "cornflower")
-    sword2 = Sword("img/sword.png", itemRadius, padding, VIRTUAL_WIDTH-iconRadius*2, VIRTUAL_HEIGHT/3-iconRadius, "brown", "mandy")
+    shield1 = Shield(shield1Img, itemRadius, padding, 0, (VIRTUAL_HEIGHT/3)*2-iconRadius, "royal_blue", "cornflower")
+    shield2 = Shield(shield2Img, itemRadius, padding, VIRTUAL_WIDTH-iconRadius*2, (VIRTUAL_HEIGHT/3)*2-iconRadius, "brown", "mandy")
+    sword1 = Sword(sword1Img, itemRadius, padding, 0, VIRTUAL_HEIGHT/3-iconRadius, "royal_blue", "cornflower")
+    sword2 = Sword(sword2Img, itemRadius, padding, VIRTUAL_WIDTH-iconRadius*2, VIRTUAL_HEIGHT/3-iconRadius, "brown", "mandy")
 
     Event.on('hit', function (subject)
         if subject == sword1 then
