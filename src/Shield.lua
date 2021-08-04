@@ -3,7 +3,7 @@ local Item = require("src.Item")
 
 --- A shield entity.
 --- @class Shield : Item
-local Shield = Class:extend(Item)
+local Shield = Item:extend()
 
 --- Create a shield.
 --- @param image string a filename

@@ -3,7 +3,7 @@ local Item = require("src.Item")
 
 --- A sword entity.
 --- @class Sword : Item
-local Sword = Class:extend(Item)
+local Sword = Item:extend()
 
 --- Create a sword.
 --- @param image string a filename

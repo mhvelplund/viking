@@ -2,7 +2,12 @@
 Behavior = require "libs.knife.knife.behavior"
 Bind = require "libs.knife.knife.bind"
 Chain = require "libs.knife.knife.chain"
+
+--- @class Class
+--- @field extend function create a sub-class
+--- @field constructor function called when the class is instantiated
 Class = require "libs.knife.knife.base"
+
 Convoke = require "libs.knife.knife.convoke"
 Event = require "libs.knife.knife.event"
 Memoize = require "libs.knife.knife.memoize"

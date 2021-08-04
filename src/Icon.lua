@@ -1,7 +1,7 @@
 require("dependencies")
 
 --- A circular icon.
---- @class Icon
+--- @class Icon : Class
 local Icon = Class:extend()
 
 --- Create a circular icon.

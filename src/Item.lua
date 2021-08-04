@@ -2,7 +2,7 @@ require("dependencies")
 local Icon = require("src.Icon")
 
 --- Base class for renderable items
---- @class Item
+--- @class Item : Class
 --- @field icon Icon the icon background
 --- @field img love.Canvas the item graphics
 --- @field x number the x location of the item
