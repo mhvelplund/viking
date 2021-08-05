@@ -4,6 +4,7 @@ SceneManager = require("src.SceneManager")
 FightScene = require("src.FightScene")
 
 VIRTUAL_WIDTH, VIRTUAL_HEIGHT = 1080, 720
+VIKING_HP = 500
 
 function love.load()
     math.randomseed(os.time())
@@ -12,7 +13,7 @@ function love.load()
     local windowWidth, windowHeight = love.window.getDesktopDimensions()
 
     Push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, windowWidth/2, windowHeight/2, {
-        fullscreen = false,
+        fullscreen = true,
         vsync = true,
         resizable = true
     })

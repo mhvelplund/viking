@@ -2,10 +2,11 @@ require("dependencies")
 
 local Sword = require("src.Sword")
 local Shield = require("src.Shield")
+local Healthbar = require("src.Healthbar")
 
 local FightScene = Scene:extend()
-local viking1, viking1hp, shield1, sword1
-local viking2, viking2hp, shield2, sword2
+local viking1, viking1hp, shield1, sword1, health1
+local viking2, viking2hp, shield2, sword2, health2
 
 local function distance(pos1,pos2)
     local x1,y1 = unpack(pos1)
@@ -20,7 +21,6 @@ function FightScene:constructor(combatant1, combatant2, sword1Img, sword2Img, sh
         drawable = _v1,
         scale = (VIRTUAL_HEIGHT*0.8)/({_v1:getDimensions()})[2]
     }
-    viking1hp = 300
 
     local _v2 = love.graphics.newImage( combatant2 )
     viking2 = scaleAndRotate {
@@ -28,7 +28,6 @@ function FightScene:constructor(combatant1, combatant2, sword1Img, sword2Img, sh
         scale = (VIRTUAL_HEIGHT*0.8)/({_v2:getDimensions()})[2],
         mirror = true
     }
-    viking2hp = 300
 
     local padding = 15
     local itemRadius = VIRTUAL_HEIGHT*0.1
@@ -37,17 +36,28 @@ function FightScene:constructor(combatant1, combatant2, sword1Img, sword2Img, sh
     shield2 = Shield(shield2Img, itemRadius, padding, VIRTUAL_WIDTH-iconRadius*2, (VIRTUAL_HEIGHT/3)*2-iconRadius, "brown", "mandy")
     sword1 = Sword(sword1Img, itemRadius, padding, 0, VIRTUAL_HEIGHT/3-iconRadius, "royal_blue", "cornflower")
     sword2 = Sword(sword2Img, itemRadius, padding, VIRTUAL_WIDTH-iconRadius*2, VIRTUAL_HEIGHT/3-iconRadius, "brown", "mandy")
+    health1 = Healthbar("royal_blue", "cornflower", 0, VIKING_HP)
+    health2 = Healthbar("brown", "mandy", VIRTUAL_WIDTH/2, VIKING_HP)
 
     Event.on('hit', function (subject)
         if subject == sword1 then
-            viking2hp = viking2hp-distance({subject:target()}, {shield2:target()})
-            print("Viking2 HP:", viking2hp)
+            health2:damage(distance({subject:target()}, {shield2:target()}))
         elseif subject == sword2 then
-            viking1hp = viking1hp-distance({subject:target()}, {shield1:target()})
-            print("Viking1 HP:", viking1hp)
+            health1:damage(distance({subject:target()}, {shield1:target()}))
         else
             assert(false, "Unexpected HIT event: "..tostring(subject))
         end
+    end)
+
+    Event.on('dead', function (subject)
+        if subject == health1 then
+            print("Player 1 is DEAD!")
+        elseif subject == health2 then
+            print("Player 2 is DEAD!")
+        else
+            assert(false, "Unexpected HIT event: "..tostring(subject))
+        end
+        love.event.quit()
     end)
 end
 
@@ -100,6 +110,8 @@ function FightScene:update(dt)
     sword2:update(dt)
     shield1:update(dt)
     shield2:update(dt)
+    health1:update(dt)
+    health2:update(dt)
 end
 
 function FightScene:render()
@@ -113,6 +125,9 @@ function FightScene:render()
     sword2:render()
     shield2:render()
 
+    -- Draw healthbars
+    health1:render()
+    health2:render()
 end
 
 return FightScene
