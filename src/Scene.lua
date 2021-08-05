@@ -3,7 +3,6 @@ local Class = require "libs.knife.knife.base"
 
 local Scene = Class:extend()
 
-function Scene:init() end
 function Scene:enter() end
 function Scene:exit() end
 function Scene:update(dt) end

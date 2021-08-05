@@ -5,9 +5,13 @@ local Shield = require("src.Shield")
 local Healthbar = require("src.Healthbar")
 
 local FightScene = Scene:extend()
-local viking1, viking1hp, shield1, sword1, health1
-local viking2, viking2hp, shield2, sword2, health2
+local viking1, shield1, sword1, health1
+local viking2, shield2, sword2, health2
 
+--- Calculate damage as the distance between the shield and the sword hit
+--- @param pos1 table list with sword position as x,y
+--- @param pos2 table list with shield position as x,y
+--- @return number the distance between the points
 local function distance(pos1,pos2)
     local x1,y1 = unpack(pos1)
     local x2,y2 = unpack(pos2)
@@ -15,7 +19,7 @@ local function distance(pos1,pos2)
 end
 
 --- Create a fight scene
-function FightScene:constructor(combatant1, combatant2, sword1Img, sword2Img, shield1Img, shield2Img)
+function FightScene:enter(combatant1, combatant2, sword1Img, sword2Img, shield1Img, shield2Img)
     local _v1 = love.graphics.newImage( combatant1 )
     viking1 = scaleAndRotate {
         drawable = _v1,
@@ -76,13 +80,13 @@ function FightScene:update(dt)
         sword1:slash('down')
     end
 
-    if love.keyboard.isDown('j') then
+    if love.keyboard.isDown('left') then
         sword2:slash('left')
-    elseif love.keyboard.isDown('i') then
+    elseif love.keyboard.isDown('up') then
         sword2:slash('up')
-    elseif love.keyboard.isDown('l') then
+    elseif love.keyboard.isDown('right') then
         sword2:slash('right')
-    elseif love.keyboard.isDown('k') then
+    elseif love.keyboard.isDown('down') then
         sword2:slash('down')
     end
 

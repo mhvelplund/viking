@@ -2,6 +2,7 @@ require "dependencies"
 
 SceneManager = require("src.SceneManager")
 FightScene = require("src.FightScene")
+TitleScene = require("src.TitleScene")
 
 VIRTUAL_WIDTH, VIRTUAL_HEIGHT = 1080, 720
 VIKING_HP = 500
@@ -44,9 +45,15 @@ function love.load()
     local sword1, sword2 = table.remove(swords, math.random(1, #swords)), table.remove(swords, math.random(1, #swords))
 
     gScenes = SceneManager {
-        ['fight'] = function() return FightScene(combatant1, combatant2, sword1, sword2, shield1, shield2) end,
+        ['title'] = function() return TitleScene() end,
+        ['fight'] = function() return FightScene() end,
     }
-    gScenes:change('fight')
+
+    gScenes:change('title')
+    Event.on('startGame', function()
+        love.graphics.reset( )
+        gScenes:change('fight', combatant1, combatant2, sword1, sword2, shield1, shield2)
+    end)
 
     love.keyboard.keysPressed = {}
 end

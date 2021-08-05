@@ -14,11 +14,11 @@ function SceneManager:constructor(states)
 	self.current = self.empty
 end
 
-function SceneManager:change(stateName, enterParams)
+function SceneManager:change(stateName,...)
 	assert(self.states[stateName]) -- state must exist!
 	self.current:exit()
 	self.current = self.states[stateName]()
-	self.current:enter(enterParams)
+	self.current:enter(unpack({...}))
 end
 
 function SceneManager:update(dt)
