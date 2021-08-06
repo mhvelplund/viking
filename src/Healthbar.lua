@@ -26,12 +26,7 @@ end
 
 function Healthbar:damage(damage)
     self.hp = math.max(0, self.hp-damage)
-    if self.hp == 0 then
-        Event.dispatch('dead', self)
-    end
-end
-
-function Healthbar:update(dt)
+    return self.hp == 0
 end
 
 return Healthbar

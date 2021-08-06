@@ -18,6 +18,7 @@ function SceneManager:change(stateName,...)
 	assert(self.states[stateName]) -- state must exist!
 	self.current:exit()
 	self.current = self.states[stateName]()
+	love.graphics.reset( )
 	self.current:enter(unpack({...}))
 end
 

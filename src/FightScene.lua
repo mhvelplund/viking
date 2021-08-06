@@ -44,24 +44,20 @@ function FightScene:enter(combatant1, combatant2, sword1Img, sword2Img, shield1I
     health2 = Healthbar("brown", "mandy", VIRTUAL_WIDTH/2, VIKING_HP)
 
     Event.on('hit', function (subject)
+        local dead, message
         if subject == sword1 then
-            health2:damage(distance({subject:target()}, {shield2:target()}))
+            dead = health2:damage(distance({subject:target()}, {shield2:target()}))
+            message = "Player 2 is DEAD!"
         elseif subject == sword2 then
-            health1:damage(distance({subject:target()}, {shield1:target()}))
+            dead = health1:damage(distance({subject:target()}, {shield1:target()}))
+            message = "Player 1 is DEAD!"
         else
             assert(false, "Unexpected HIT event: "..tostring(subject))
         end
-    end)
 
-    Event.on('dead', function (subject)
-        if subject == health1 then
-            print("Player 1 is DEAD!")
-        elseif subject == health2 then
-            print("Player 2 is DEAD!")
-        else
-            assert(false, "Unexpected HIT event: "..tostring(subject))
+        if dead then
+            Event.dispatch("dead", message)
         end
-        love.event.quit()
     end)
 end
 
@@ -114,8 +110,6 @@ function FightScene:update(dt)
     sword2:update(dt)
     shield1:update(dt)
     shield2:update(dt)
-    health1:update(dt)
-    health2:update(dt)
 end
 
 function FightScene:render()

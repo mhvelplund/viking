@@ -14,9 +14,13 @@ function TitleScene:constructor()
     titleFont = love.graphics.newFont( nordicFont, 96 )
 end
 
+function TitleScene:enter(title)
+    self.title = title
+end
+
 function TitleScene:render()
     local fuzz = 6
-    local text = "Vikingr!"
+    local text = self.title
     local tw,th = getFontSize(titleFont, text)
     local x = VIRTUAL_WIDTH/2-tw/2 - fuzz/2 + math.random(0,fuzz)
     local y = VIRTUAL_HEIGHT/3-th/2 - fuzz/2 + math.random(0,fuzz)
