@@ -7,6 +7,7 @@ local Healthbar = require("src.Healthbar")
 local FightScene = Scene:extend()
 local viking1, shield1, sword1, health1
 local viking2, shield2, sword2, health2
+local thud, parry, scream
 
 --- Calculate damage as the distance between the shield and the sword hit
 --- @param pos1 table list with sword position as x,y
@@ -16,6 +17,12 @@ local function distance(pos1,pos2)
     local x1,y1 = unpack(pos1)
     local x2,y2 = unpack(pos2)
     return math.sqrt(math.pow(x2-x1,2)+math.pow(y2-y1,2))
+end
+
+function FightScene:constructor()
+    thud = love.audio.newSource("fx/thud.wav", "static")
+    parry = love.audio.newSource("fx/parry.wav", "static")
+    scream = love.audio.newSource("fx/scream.wav", "static")
 end
 
 --- Create a fight scene
@@ -44,18 +51,27 @@ function FightScene:enter(combatant1, combatant2, sword1Img, sword2Img, shield1I
     health2 = Healthbar("brown", "mandy", VIRTUAL_WIDTH/2, VIKING_HP)
 
     Event.on('hit', function (subject)
-        local dead, message
+        local dead, message, damage
         if subject == sword1 then
-            dead = health2:damage(distance({subject:target()}, {shield2:target()}))
+            damage = distance({subject:target()}, {shield2:target()})
+            dead = health2:damage(damage)
             message = "Player 2 is DEAD!"
         elseif subject == sword2 then
-            dead = health1:damage(distance({subject:target()}, {shield1:target()}))
+            damage = distance({subject:target()}, {shield1:target()})
+            dead = health1:damage(damage)
             message = "Player 1 is DEAD!"
         else
             assert(false, "Unexpected HIT event: "..tostring(subject))
         end
 
+        if (damage < 10) then
+            love.audio.play(parry)
+        else
+            love.audio.play(thud)
+        end
+
         if dead then
+            love.audio.play(scream)
             Event.dispatch("dead", message)
         end
     end)
