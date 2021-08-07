@@ -8,7 +8,7 @@ function Healthbar:constructor(dark, light, xOffset, hp)
     self.width = (VIRTUAL_WIDTH/2)*0.8
     self.height = 30
     self.x = VIRTUAL_WIDTH/4 - self.width/2 + xOffset
-    self.y = VIRTUAL_HEIGHT - self.height
+    self.y = VIRTUAL_HEIGHT - (self.height + 10)
     self.hp = hp
 end
 
